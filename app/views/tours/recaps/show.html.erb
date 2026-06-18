@@ -1,0 +1,22 @@
+<% content_for :title, "Recap · #{@tour.name}" %>
+<% recap = recap_text(@tour) %>
+<% subject = "Tour recap: #{@tour.name}" %>
+<div class="mx-auto max-w-2xl px-4 py-8" data-controller="clipboard">
+  <%= link_to tour_path(@tour), class: "mb-3 inline-flex items-center gap-1 text-sm text-muted hover:text-ink" do %>
+    &larr; <%= @tour.name %>
+  <% end %>
+  <h1 class="mb-4 font-display text-2xl">Tour Recap</h1>
+
+  <%= text_area_tag :recap, recap, rows: 16, readonly: true,
+        class: "tv-input font-sans", data: { clipboard_target: "source" } %>
+
+  <div class="mt-4 flex flex-wrap gap-2">
+    <button type="button" data-action="clipboard#copy" data-clipboard-target="button" class="tv-btn-dark">Copy</button>
+    <% if @tour.client.email.present? %>
+      <%= link_to "Email", mailto_link(@tour.client.email, subject, recap), class: "tv-btn-light" %>
+    <% end %>
+    <% if @tour.client.phone.present? %>
+      <%= link_to "Text", sms_link(@tour.client.phone, recap), class: "tv-btn-light" %>
+    <% end %>
+  </div>
+</div>

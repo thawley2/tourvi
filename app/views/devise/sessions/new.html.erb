@@ -1,0 +1,39 @@
+<% content_for :title, "Log in" %>
+<div class="flex min-h-screen flex-col items-center justify-center px-5 py-10">
+  <div class="mb-9 flex items-center gap-2.5">
+    <span class="flex h-9 w-9 items-center justify-center rounded-[9px] bg-ink">
+      <svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path d="M7 1L2 5.5V13h3.5V9h3v4H12V5.5L7 1Z" fill="#C9A96E"/></svg>
+    </span>
+    <span class="font-display text-[28px] font-medium tracking-tight">tourvi</span>
+  </div>
+
+  <div class="w-full max-w-md rounded-2xl border border-line bg-white p-8 shadow-sm">
+    <h1 class="font-display text-xl">Welcome back</h1>
+    <p class="mb-6 mt-1 text-sm text-muted">Sign in to your tourvi account</p>
+
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="mb-3.5">
+        <%= f.label :email, class: "tv-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "tv-input", placeholder: "you@brokerage.com" %>
+      </div>
+      <div class="mb-4">
+        <%= f.label :password, class: "tv-label" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "tv-input", placeholder: "••••••••" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <label class="mb-4 flex items-center gap-2 text-sm text-muted">
+          <%= f.check_box :remember_me %> Remember me
+        </label>
+      <% end %>
+
+      <%= f.submit "Log in", class: "tv-btn-dark w-full" %>
+    <% end %>
+
+    <%= render "devise/shared/links" %>
+  </div>
+
+  <p class="mt-5 text-xs text-muted">tourvi · Real Estate Tour Management</p>
+</div>

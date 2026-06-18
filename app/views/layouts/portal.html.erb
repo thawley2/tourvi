@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Tourvi" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen bg-portal">
+    <header class="flex h-[51px] items-center gap-2 bg-portal-ink px-4 sm:px-6">
+      <span class="flex h-[26px] w-[26px] items-center justify-center rounded-md bg-gold">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L2 5.5V13h3.5V9h3v4H12V5.5L7 1Z" fill="#3D2B0A"/></svg>
+      </span>
+      <span class="font-display text-[17px] font-medium tracking-tight text-white">tourvi</span>
+      <span class="rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gold">Client Portal</span>
+    </header>
+
+    <%= render "shared/flash" %>
+    <%= yield %>
+  </body>
+</html>

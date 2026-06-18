@@ -1,0 +1,94 @@
+<% content_for :title, @tour.name %>
+<div class="mx-auto max-w-3xl px-4 py-8">
+  <%= link_to root_path, class: "mb-3 inline-flex items-center gap-1 text-sm text-muted hover:text-ink" do %>
+    &larr; Tours
+  <% end %>
+
+  <%# Header %>
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <h1 class="font-display text-2xl"><%= @tour.name %></h1>
+      <p class="mt-1 text-sm text-muted">
+        <%= link_to @tour.client.name, @tour.client, class: "hover:text-ink" %>
+        <% if @tour.tour_date %>&middot; <%= format_tour_date(@tour.tour_date) %><%= " at #{@tour.tour_time}" if @tour.tour_time.present? %><% end %>
+      </p>
+    </div>
+    <%= status_badge(@tour.past? ? "completed" : @tour.status) %>
+  </div>
+
+  <%# Actions %>
+  <div class="mt-4 flex flex-wrap gap-2">
+    <%= link_to "Edit", edit_tour_path(@tour), class: "tv-btn-light !py-2 !text-xs" %>
+    <% if @tour.status == "draft" %>
+      <%= button_to "Publish", tour_path(@tour), method: :patch, params: { tour: { status: "confirmed" } }, class: "tv-btn-gold !py-2 !text-xs" %>
+    <% elsif @tour.status == "confirmed" %>
+      <%= button_to "Revert to draft", tour_path(@tour), method: :patch, params: { tour: { status: "draft" } }, class: "tv-btn-light !py-2 !text-xs" %>
+      <%= button_to "Mark completed", tour_path(@tour), method: :patch, params: { tour: { status: "completed" } }, class: "tv-btn-light !py-2 !text-xs" %>
+    <% end %>
+    <%= button_to "Duplicate", tour_duplicate_path(@tour), method: :post, class: "tv-btn-light !py-2 !text-xs" %>
+    <% if @properties.any? %>
+      <%= link_to "Maps route", maps_route_url(@properties), target: "_blank", rel: "noopener", class: "tv-btn-light !py-2 !text-xs" %>
+    <% end %>
+    <% if google_calendar_url(@tour) %>
+      <%= link_to "+ Calendar", google_calendar_url(@tour), target: "_blank", rel: "noopener", class: "tv-btn-light !py-2 !text-xs" %>
+    <% end %>
+    <%= link_to "Recap", tour_recap_path(@tour), class: "tv-btn-light !py-2 !text-xs" %>
+    <%= link_to "Share", tour_share_path(@tour), class: "tv-btn-light !py-2 !text-xs" %>
+    <%= button_to "Delete", tour_path(@tour), method: :delete, class: "tv-btn-danger !py-2 !text-xs",
+          form: { data: { turbo_confirm: "Delete this tour?" } } %>
+  </div>
+
+  <%# Stops %>
+  <div class="mt-6">
+    <div class="mb-3 flex items-center justify-between">
+      <h2 class="font-display text-lg">Stops</h2>
+      <% if @properties.size > 1 %>
+        <span class="text-xs text-muted"><%= pluralize(@properties.size, "stop") %> &middot; ~<%= total_drive_time(@properties.size) %> min total drive</span>
+      <% end %>
+    </div>
+
+    <% if @properties.any? %>
+      <div id="stops" class="flex flex-col gap-2"
+           data-controller="sortable"
+           data-sortable-url-value="<%= tour_property_path(@tour, "ID") %>">
+        <% @properties.each_with_index do |property, i| %>
+          <%= render "tours/property", property: property, tour: @tour, index: i %>
+        <% end %>
+      </div>
+      <% if @properties.size > 1 %>
+        <p class="mt-2 text-xs text-muted">Drag stops by the number handle to reorder.</p>
+      <% end %>
+    <% else %>
+      <div class="tv-card p-6 text-center text-sm text-muted">No stops yet. Add the first property below.</div>
+    <% end %>
+  </div>
+
+  <%# Add property %>
+  <details class="tv-card mt-3 p-4">
+    <summary class="cursor-pointer text-sm font-semibold text-gold-deep">+ Add a property</summary>
+    <%= render "properties/form", tour: @tour, property: @property %>
+  </details>
+
+  <%# Post-tour notes %>
+  <% if @tour.post_notes.present? %>
+    <div class="tv-card mt-6 p-4">
+      <div class="tv-label">Post-tour notes</div>
+      <p class="text-sm text-[#555555]"><%= simple_format @tour.post_notes %></p>
+    </div>
+  <% end %>
+
+  <%# Client suggestions %>
+  <% if @suggestions.any? %>
+    <div class="mt-6">
+      <h2 class="mb-3 font-display text-lg">Client Suggestions</h2>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <%= render @suggestions %>
+      </div>
+    </div>
+  <% end %>
+
+  <%# Messages %>
+  <div class="mt-6">
+    <%= render "messages/thread", tour: @tour, messages: @messages, sender_type: "agent" %>
+  </div>
+</div>

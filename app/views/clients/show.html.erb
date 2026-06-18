@@ -1,0 +1,70 @@
+<% content_for :title, @client.name %>
+<div class="tv-page">
+  <%= link_to clients_path, class: "mb-3 inline-flex items-center gap-1 text-sm text-muted hover:text-ink" do %>
+    &larr; Clients
+  <% end %>
+
+  <div class="tv-card p-6">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <%= avatar @client.name, size: :lg, idx: @client.id %>
+        <div>
+          <h1 class="font-display text-2xl"><%= @client.name %></h1>
+          <div class="mt-1"><%= stage_badge @client.stage %></div>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <%= link_to "Edit", edit_client_path(@client), class: "tv-btn-light" %>
+        <%= button_to "Delete", @client, method: :delete, class: "tv-btn-danger",
+              form: { data: { turbo_confirm: "Delete #{@client.name} and all their tours?" } } %>
+      </div>
+    </div>
+
+    <%# Contact quick-actions %>
+    <div class="mt-5 flex flex-wrap gap-2">
+      <% if @client.phone.present? %>
+        <%= link_to "Call", "tel:#{@client.phone}", class: "tv-btn-light" %>
+        <%= link_to "Text", "sms:#{@client.phone}", class: "tv-btn-light" %>
+      <% end %>
+      <% if @client.email.present? %>
+        <%= link_to "Email", "mailto:#{@client.email}", class: "tv-btn-light" %>
+      <% end %>
+    </div>
+
+    <dl class="mt-6 grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
+      <div><dt class="tv-label">Email</dt><dd><%= @client.email.presence || "—" %></dd></div>
+      <div><dt class="tv-label">Phone</dt><dd><%= @client.phone.presence || "—" %></dd></div>
+      <div><dt class="tv-label">Budget</dt><dd><%= @client.budget.presence || "—" %></dd></div>
+      <div><dt class="tv-label">Pre-approved</dt><dd><%= @client.pre_approved %></dd></div>
+      <div><dt class="tv-label">Pre-approval amount</dt><dd><%= @client.pre_approval_amount.presence || "—" %></dd></div>
+    </dl>
+
+    <% if @client.notes.present? %>
+      <div class="mt-5">
+        <div class="tv-label">Notes</div>
+        <p class="text-sm text-[#555555]"><%= simple_format @client.notes %></p>
+      </div>
+    <% end %>
+
+    <%# Shareable portal link %>
+    <div class="mt-6 border-t border-line pt-5" data-controller="clipboard">
+      <div class="tv-label">Client portal link</div>
+      <div class="flex flex-wrap items-center gap-2">
+        <input type="text" readonly value="<%= portal_client_tours_url(@client.portal_token) %>"
+               data-clipboard-target="source" class="tv-input flex-1 min-w-0">
+        <button type="button" data-action="clipboard#copy" data-clipboard-target="button" class="tv-btn-gold">Copy link</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="mb-3 mt-8 font-display text-xl">Tours</h2>
+  <% if @tours.any? %>
+    <div class="tv-card divide-y divide-cream overflow-hidden">
+      <% @tours.each do |tour| %>
+        <%= render "tours/row", tour: tour %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="tv-card p-8 text-center text-muted">No tours yet for this client.</div>
+  <% end %>
+</div>

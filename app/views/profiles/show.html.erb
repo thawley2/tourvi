@@ -1,0 +1,31 @@
+<% content_for :title, "Profile" %>
+<div class="mx-auto max-w-2xl px-4 py-8">
+  <div class="mb-5 flex items-center justify-between">
+    <h1 class="font-display text-2xl">Profile</h1>
+    <%= link_to "Edit", edit_profile_path, class: "tv-btn-light" %>
+  </div>
+
+  <div class="tv-card p-6">
+    <div class="flex items-center gap-4">
+      <%= agent_avatar @agent, size: :lg %>
+      <div>
+        <div class="text-lg font-bold"><%= @agent.name %></div>
+        <div class="text-sm text-muted"><%= [@agent.title, @agent.brokerage].compact_blank.join(" · ") %></div>
+      </div>
+    </div>
+
+    <dl class="mt-6 grid grid-cols-2 gap-4 text-sm">
+      <div><dt class="tv-label">Email</dt><dd><%= @agent.email %></dd></div>
+      <div><dt class="tv-label">Phone</dt><dd><%= @agent.phone.presence || "—" %></dd></div>
+      <div><dt class="tv-label">License</dt><dd><%= @agent.license_number.presence || "—" %></dd></div>
+      <div><dt class="tv-label">Brokerage</dt><dd><%= @agent.brokerage.presence || "—" %></dd></div>
+    </dl>
+
+    <% if @agent.bio.present? %>
+      <div class="mt-5">
+        <div class="tv-label">Bio</div>
+        <p class="text-sm text-[#555555]"><%= @agent.bio %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

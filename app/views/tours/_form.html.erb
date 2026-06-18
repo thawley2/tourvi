@@ -1,0 +1,41 @@
+<%= form_with model: tour, class: "tv-card p-6" do |f| %>
+  <% if tour.errors.any? %>
+    <div class="mb-4 rounded-lg border border-[#FECACA] bg-[#FEF2F2] px-4 py-3 text-sm text-[#DC2626]">
+      <%= pluralize(tour.errors.count, "error") %> prevented saving:
+      <ul class="ml-4 list-disc">
+        <% tour.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="sm:col-span-2">
+      <%= f.label :name, "Tour name", class: "tv-label" %>
+      <%= f.text_field :name, class: "tv-input", placeholder: "Highlands Weekend" %>
+    </div>
+    <div class="sm:col-span-2">
+      <%= f.label :client_id, "Client", class: "tv-label" %>
+      <%= f.collection_select :client_id, current_agent.clients.order(:name), :id, :name,
+            { prompt: "Select a client" }, class: "tv-input" %>
+    </div>
+    <div>
+      <%= f.label :tour_date, "Date", class: "tv-label" %>
+      <%= f.date_field :tour_date, class: "tv-input" %>
+    </div>
+    <div>
+      <%= f.label :tour_time, "Time", class: "tv-label" %>
+      <%= f.text_field :tour_time, class: "tv-input", placeholder: "10:00 AM" %>
+    </div>
+    <% if tour.persisted? %>
+      <div class="sm:col-span-2">
+        <%= f.label :post_notes, "Post-tour notes (agent only)", class: "tv-label" %>
+        <%= f.text_area :post_notes, rows: 3, class: "tv-input" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-5 flex gap-2">
+    <%= f.submit submit_label, class: "tv-btn-dark" %>
+    <%= link_to "Cancel", (tour.persisted? ? tour_path(tour) : root_path), class: "tv-btn-light" %>
+  </div>
+<% end %>

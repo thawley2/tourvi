@@ -1,1 +1,71 @@
 @import "tailwindcss";
+
+@theme {
+  /* Brand palette (from the tourvi prototype) */
+  --color-cream: #f5f3ef;
+  --color-cream-card: #fafaf8;
+  --color-ink: #1a1a18;
+  --color-gold: #c9a96e;
+  --color-gold-deep: #8b6914;
+  --color-gold-soft: #e8d9bc;
+  --color-line: #e8e4dc;
+  --color-muted: #888888;
+  --color-portal: #fdf8f0;
+  --color-portal-ink: #3d2b0a;
+
+  /* Typography */
+  --font-sans: "DM Sans", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+}
+
+@layer base {
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+  }
+
+  h1, h2, h3 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .tv-card {
+    @apply rounded-2xl border border-line bg-white;
+  }
+
+  .tv-label {
+    @apply mb-1 block text-[11px] font-semibold uppercase tracking-wide text-muted;
+  }
+
+  .tv-input {
+    @apply w-full rounded-lg border border-[#E0DDD6] bg-cream-card px-3 py-2.5 text-sm focus:border-transparent focus:outline-2 focus:outline-gold;
+  }
+
+  .tv-btn, .tv-btn-dark, .tv-btn-gold, .tv-btn-light, .tv-btn-danger {
+    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-semibold transition;
+  }
+
+  .tv-btn-dark {
+    @apply bg-ink text-white hover:opacity-90;
+  }
+
+  .tv-btn-gold {
+    @apply bg-gold-deep text-white hover:opacity-90;
+  }
+
+  .tv-btn-light {
+    @apply border border-line bg-white text-ink hover:bg-cream;
+  }
+
+  .tv-btn-danger {
+    @apply bg-[#FEE2E2] text-[#DC2626] hover:bg-[#FECACA];
+  }
+
+  .tv-page {
+    @apply mx-auto max-w-5xl px-4 py-8;
+  }
+
+  .tv-chip {
+    @apply inline-flex items-center rounded-md bg-cream px-2 py-0.5 text-xs text-[#666666];
+  }
+}

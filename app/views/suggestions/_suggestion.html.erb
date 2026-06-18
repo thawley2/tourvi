@@ -1,0 +1,27 @@
+<%# Pass `suggestion`. %>
+<div id="<%= dom_id(suggestion) %>" class="tv-card p-4">
+  <div class="flex items-start justify-between gap-2">
+    <div>
+      <div class="font-semibold"><%= suggestion.address %></div>
+      <div class="text-xs text-muted"><%= suggestion.city %></div>
+    </div>
+    <%= suggestion_status_badge suggestion.status %>
+  </div>
+  <div class="mt-2 flex flex-wrap items-center gap-1.5">
+    <% if suggestion.beds %><span class="tv-chip"><%= suggestion.beds %> bd</span><% end %>
+    <% if suggestion.baths %><span class="tv-chip"><%= suggestion.baths %> ba</span><% end %>
+    <% if suggestion.price.present? %><span class="text-sm font-bold text-gold-deep"><%= suggestion.price %></span><% end %>
+  </div>
+  <p class="mt-2 text-xs text-muted">
+    From <%= link_to suggestion.client.name, suggestion.client, class: "underline" %>
+    on <%= link_to suggestion.tour.name, suggestion.tour, class: "underline" %>
+  </p>
+  <% if suggestion.status == "pending" %>
+    <div class="mt-3 flex gap-2">
+      <%= button_to "Approve & add", suggestion_path(suggestion), method: :patch,
+            params: { decision: "approve" }, class: "tv-btn-gold !py-2 !text-xs" %>
+      <%= button_to "Decline", suggestion_path(suggestion), method: :patch,
+            params: { decision: "decline" }, class: "tv-btn-light !py-2 !text-xs" %>
+    </div>
+  <% end %>
+</div>

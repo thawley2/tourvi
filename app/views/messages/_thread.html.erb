@@ -1,0 +1,24 @@
+<%# Pass `tour`, `messages`, `sender_type` ("agent" or "client"), and optional `form_url`. %>
+<%= turbo_stream_from tour, sender_type %>
+<div class="tv-card overflow-hidden">
+  <div class="flex items-center gap-2 border-b border-line px-4 py-3">
+    <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 2h10v9H8.5L5 13V11H2V2Z" stroke="#888" stroke-width="1.3" stroke-linejoin="round"/></svg>
+    <span class="text-sm font-semibold">Messages</span>
+  </div>
+
+  <div id="<%= dom_id(tour, :messages) %>" class="flex max-h-72 flex-col gap-3 overflow-y-auto px-4 py-3">
+    <% if messages.any? %>
+      <%= render partial: "messages/message", collection: messages, locals: { viewer: sender_type } %>
+    <% else %>
+      <p class="py-3 text-center text-sm text-muted">No messages yet.</p>
+    <% end %>
+  </div>
+
+  <%= form_with url: (local_assigns[:form_url] || tour_messages_path(tour)),
+        class: "flex gap-2 border-t border-line px-3 py-2.5",
+        data: { controller: "reset-form", action: "turbo:submit-end->reset-form#reset" } do |f| %>
+    <%= f.hidden_field :sender_type, value: sender_type %>
+    <%= f.text_field :body, class: "tv-input", placeholder: "Type a message...", autocomplete: "off" %>
+    <%= f.submit "Send", class: "#{sender_type == "client" ? "tv-btn-gold" : "tv-btn-dark"} shrink-0" %>
+  <% end %>
+</div>

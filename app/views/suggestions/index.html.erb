@@ -1,0 +1,11 @@
+<% content_for :title, "Suggestions" %>
+<div class="tv-page">
+  <h1 class="mb-5 font-display text-2xl">Client Suggestions</h1>
+  <% if @suggestions.any? %>
+    <div class="grid gap-3 sm:grid-cols-2">
+      <%= render @suggestions %>
+    </div>
+  <% else %>
+    <div class="tv-card p-10 text-center text-muted">No suggestions yet.</div>
+  <% end %>
+</div>

@@ -1,0 +1,17 @@
+<% content_for :title, "Clients" %>
+<div class="tv-page">
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="font-display text-2xl">Clients</h1>
+    <%= link_to "+ New Client", new_client_path, class: "tv-btn-dark" %>
+  </div>
+
+  <% if @clients.any? %>
+    <div class="grid gap-3 sm:grid-cols-2">
+      <%= render @clients %>
+    </div>
+  <% else %>
+    <div class="tv-card p-10 text-center text-muted">
+      No clients yet. <%= link_to "Add your first client", new_client_path, class: "text-gold-deep underline" %>.
+    </div>
+  <% end %>
+</div>

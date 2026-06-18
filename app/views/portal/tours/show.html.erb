@@ -1,0 +1,52 @@
+<% content_for :title, @tour.name %>
+<div class="mx-auto max-w-2xl px-4 py-7">
+  <%= link_to portal_client_tours_path(@client.portal_token),
+        class: "mb-3 inline-flex items-center gap-1 text-sm text-muted hover:text-ink" do %>
+    &larr; My Tours
+  <% end %>
+
+  <div class="flex flex-wrap items-start justify-between gap-2">
+    <div>
+      <h1 class="font-display text-2xl"><%= @tour.name %></h1>
+      <% if @tour.tour_date %>
+        <p class="mt-1 text-sm text-muted"><%= format_tour_date(@tour.tour_date) %><%= " at #{@tour.tour_time}" if @tour.tour_time.present? %></p>
+      <% end %>
+    </div>
+    <div class="flex gap-2">
+      <% if @properties.any? %>
+        <%= link_to "Maps", maps_route_url(@properties), target: "_blank", rel: "noopener", class: "tv-btn-gold !py-2 !text-xs" %>
+      <% end %>
+      <% if google_calendar_url(@tour) %>
+        <%= link_to "+ Cal", google_calendar_url(@tour), target: "_blank", rel: "noopener", class: "tv-btn-light !py-2 !text-xs" %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @properties.size > 1 %>
+    <div class="mt-4 flex flex-wrap gap-3 rounded-lg border border-gold-soft bg-[#FBF7EF] px-3 py-2 text-xs text-[#7A5C14]">
+      <span><%= pluralize(@properties.size, "stop") %></span>
+      <span>~<%= total_drive_time(@properties.size) %> min total drive</span>
+    </div>
+  <% end %>
+
+  <%# Stops %>
+  <div class="mt-4 flex flex-col">
+    <% @properties.each_with_index do |property, i| %>
+      <%= render "portal/tours/stop", property: property, index: i, rating: @ratings[property.id] %>
+      <% if i < @properties.size - 1 %>
+        <%= render "tours/drive_pill", minutes: drive_time(i) %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%# Suggestions %>
+  <div class="mt-5">
+    <%= render "portal/suggestions/section", suggestions: @suggestions %>
+  </div>
+
+  <%# Messages %>
+  <div class="mt-5">
+    <%= render "messages/thread", tour: @tour, messages: @messages, sender_type: "client",
+          form_url: portal_client_tour_messages_path(@client.portal_token, @tour) %>
+  </div>
+</div>

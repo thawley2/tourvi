@@ -1,0 +1,10 @@
+<%# Reusable tour list row. Pass `tour`. %>
+<%= link_to tour_path(tour), id: dom_id(tour), class: "flex items-center justify-between gap-3 px-5 py-3.5 transition hover:bg-[#EFEDE8]" do %>
+  <div class="min-w-0">
+    <div class="truncate font-semibold"><%= tour.name %></div>
+    <div class="mt-0.5 text-xs text-muted">
+      <%= tour.client.name %> &middot; <%= pluralize(tour.properties.size, "stop") %><%= " · #{format_tour_date(tour.tour_date)}" if tour.tour_date %><%= " at #{tour.tour_time}" if tour.tour_time.present? %>
+    </div>
+  </div>
+  <%= status_badge(tour.past? ? "completed" : tour.status) %>
+<% end %>

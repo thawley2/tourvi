@@ -1,0 +1,42 @@
+<%# Pass `property`, `index`, `rating` (or nil). %>
+<div id="<%= dom_id(property) %>" class="rounded-xl border border-gold-soft bg-white p-4">
+  <div class="flex gap-3">
+    <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold text-[11px] font-bold text-[#3D2B0A]"><%= index + 1 %></div>
+    <div class="flex-1">
+      <div class="font-semibold"><%= property.address %></div>
+      <div class="text-xs text-muted"><%= property.city %></div>
+
+      <div class="mt-2 flex flex-wrap items-center gap-1.5">
+        <% if property.beds %><span class="tv-chip"><%= property.beds %> bd</span><% end %>
+        <% if property.baths %><span class="tv-chip"><%= property.baths %> ba</span><% end %>
+        <% if property.price.present? %><span class="text-sm font-bold text-gold-deep"><%= property.price %></span><% end %>
+      </div>
+
+      <% if property.notes.present? %>
+        <div class="mt-2 rounded-lg border-l-[3px] border-gold bg-[#F8F7FC] px-3 py-2 text-xs leading-relaxed text-[#555555]">
+          <span class="mb-0.5 block text-[10px] font-bold text-muted">AGENT NOTE</span>
+          <%= property.notes %>
+        </div>
+      <% end %>
+
+      <%# Rating buttons %>
+      <div class="mt-3 flex flex-wrap items-center gap-1.5">
+        <span class="text-[11px] font-semibold text-muted">Your reaction:</span>
+        <% { 1 => "😐 Meh", 2 => "👍 Like", 3 => "❤️ Love it" }.each do |value, label| %>
+          <% active = rating&.value == value %>
+          <% btn_class = "rounded-full border px-2.5 py-0.5 text-xs #{active ? "border-gold bg-[#FBF7EF] font-bold text-gold-deep" : "border-gold-soft bg-[#F9F8FC] text-[#666666]"}" %>
+          <% if rating.nil? %>
+            <%= button_to label, portal_client_tour_ratings_path(@client.portal_token, @tour),
+                  params: { rating: { property_id: property.id, value: value } }, class: btn_class %>
+          <% elsif active %>
+            <%= button_to label, portal_client_tour_rating_path(@client.portal_token, @tour, rating),
+                  method: :delete, class: btn_class %>
+          <% else %>
+            <%= button_to label, portal_client_tour_rating_path(@client.portal_token, @tour, rating),
+                  method: :patch, params: { rating: { value: value } }, class: btn_class %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

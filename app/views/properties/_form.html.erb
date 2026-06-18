@@ -1,0 +1,34 @@
+<%# Pass `tour`, `property`. %>
+<%= form_with model: [tour, property], class: "mt-3" do |f| %>
+  <div class="grid gap-3 sm:grid-cols-2">
+    <div class="sm:col-span-2">
+      <%= f.label :address, class: "tv-label" %>
+      <%= f.text_field :address, class: "tv-input", placeholder: "123 Main St" %>
+    </div>
+    <div class="sm:col-span-2">
+      <%= f.label :city, "City, State ZIP", class: "tv-label" %>
+      <%= f.text_field :city, class: "tv-input", placeholder: "Denver, CO 80203" %>
+    </div>
+    <div>
+      <%= f.label :price, class: "tv-label" %>
+      <%= f.text_field :price, class: "tv-input", placeholder: "$450,000" %>
+    </div>
+    <div>
+      <%= f.label :mls_id, "MLS ID", class: "tv-label" %>
+      <%= f.text_field :mls_id, class: "tv-input" %>
+    </div>
+    <div>
+      <%= f.label :beds, class: "tv-label" %>
+      <%= f.number_field :beds, class: "tv-input" %>
+    </div>
+    <div>
+      <%= f.label :baths, class: "tv-label" %>
+      <%= f.number_field :baths, class: "tv-input" %>
+    </div>
+    <div class="sm:col-span-2">
+      <%= f.label :notes, "Agent note (visible to client)", class: "tv-label" %>
+      <%= f.text_area :notes, rows: 2, class: "tv-input" %>
+    </div>
+  </div>
+  <%= f.submit "Add property", class: "tv-btn-dark mt-3 !py-2 !text-xs" %>
+<% end %>

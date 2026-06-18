@@ -1,0 +1,14 @@
+<%# Pass `notification`. Clicking marks it read and opens the related tour. %>
+<%= button_to notification_path(notification), method: :patch,
+      class: "block w-full border-b border-cream text-left #{notification.read? ? "" : "bg-[#FFFBF4]"}" do %>
+  <div class="flex items-start gap-2.5 px-4 py-3">
+    <span class="mt-0.5 shrink-0 text-base"><%= notification.icon %></span>
+    <div class="flex-1">
+      <div class="text-[13px] leading-snug <%= notification.read? ? "text-ink" : "font-medium text-ink" %>"><%= notification.body %></div>
+      <div class="mt-0.5 text-[11px] text-muted"><%= time_ago_in_words(notification.created_at) %> ago</div>
+    </div>
+    <% unless notification.read? %>
+      <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold"></span>
+    <% end %>
+  </div>
+<% end %>

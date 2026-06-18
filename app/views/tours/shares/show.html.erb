@@ -1,0 +1,24 @@
+<% content_for :title, "Share · #{@tour.name}" %>
+<% link = portal_client_tours_url(@client.portal_token) %>
+<% body = "Hi #{@client.name.split(" ").first}, here's your tour portal for #{@tour.name}: #{link}" %>
+<div class="mx-auto max-w-2xl px-4 py-8" data-controller="clipboard">
+  <%= link_to tour_path(@tour), class: "mb-3 inline-flex items-center gap-1 text-sm text-muted hover:text-ink" do %>
+    &larr; <%= @tour.name %>
+  <% end %>
+  <h1 class="mb-1 font-display text-2xl">Share with <%= @client.name %></h1>
+  <p class="mb-4 text-sm text-muted">Anyone with this link can view <%= @client.name %>’s tours — no login required.</p>
+
+  <div class="flex flex-wrap items-center gap-2">
+    <input type="text" readonly value="<%= link %>" data-clipboard-target="source" class="tv-input min-w-0 flex-1">
+    <button type="button" data-action="clipboard#copy" data-clipboard-target="button" class="tv-btn-gold">Copy link</button>
+  </div>
+
+  <div class="mt-4 flex flex-wrap gap-2">
+    <% if @client.email.present? %>
+      <%= link_to "Email link", mailto_link(@client.email, "Your tour portal", body), class: "tv-btn-light" %>
+    <% end %>
+    <% if @client.phone.present? %>
+      <%= link_to "Text link", sms_link(@client.phone, body), class: "tv-btn-light" %>
+    <% end %>
+  </div>
+</div>

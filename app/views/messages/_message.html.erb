@@ -1,0 +1,13 @@
+<%# Pass `message` and `viewer` ("agent" or "client"). %>
+<% mine = message.sender_type == viewer %>
+<div id="<%= dom_id(message) %>" class="flex items-end gap-2 <%= "flex-row-reverse" if mine %>">
+  <%= avatar message.sender_name, size: :xs, idx: (message.from_agent? ? 0 : 1) %>
+  <div class="max-w-[70%]">
+    <div class="rounded-xl px-3 py-2 text-sm leading-relaxed <%= mine ? "bg-ink text-white rounded-br-sm" : "bg-cream text-ink rounded-bl-sm" %>">
+      <%= message.body %>
+    </div>
+    <div class="mt-0.5 text-[11px] text-muted <%= mine ? "text-right" : "text-left" %>">
+      <%= message.created_at.strftime("%b %-d, %-l:%M %p") %>
+    </div>
+  </div>
+</div>

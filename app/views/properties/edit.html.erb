@@ -1,0 +1,11 @@
+<%= turbo_frame_tag dom_id(@property) do %>
+  <%= form_with model: [@tour, @property], class: "tv-card p-4" do |f| %>
+    <div class="mb-2 text-sm font-semibold"><%= @property.address %></div>
+    <%= f.label :notes, "Agent note (visible to client)", class: "tv-label" %>
+    <%= f.text_area :notes, rows: 3, class: "tv-input", autofocus: true %>
+    <div class="mt-3 flex gap-2">
+      <%= f.submit "Save note", class: "tv-btn-dark !py-2 !text-xs" %>
+      <%= link_to "Cancel", tour_path(@tour), class: "tv-btn-light !py-2 !text-xs" %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,17 @@
+<% content_for :title, "Notifications" %>
+<div class="mx-auto max-w-2xl px-4 py-8">
+  <div class="mb-5 flex items-center justify-between">
+    <h1 class="font-display text-2xl">Notifications</h1>
+    <% if @notifications.unread.any? %>
+      <%= button_to "Mark all read", notification_reads_path, method: :patch, class: "tv-btn-light !py-2 !text-xs" %>
+    <% end %>
+  </div>
+
+  <% if @notifications.any? %>
+    <div class="tv-card overflow-hidden">
+      <%= render partial: "notifications/notification", collection: @notifications %>
+    </div>
+  <% else %>
+    <div class="tv-card p-10 text-center text-muted">No notifications yet.</div>
+  <% end %>
+</div>

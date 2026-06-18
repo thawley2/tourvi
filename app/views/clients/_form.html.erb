@@ -1,0 +1,50 @@
+<%= form_with model: client, class: "tv-card p-6" do |f| %>
+  <% if client.errors.any? %>
+    <div class="mb-4 rounded-lg border border-[#FECACA] bg-[#FEF2F2] px-4 py-3 text-sm text-[#DC2626]">
+      <%= pluralize(client.errors.count, "error") %> prevented saving:
+      <ul class="ml-4 list-disc">
+        <% client.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="sm:col-span-2">
+      <%= f.label :name, class: "tv-label" %>
+      <%= f.text_field :name, class: "tv-input", placeholder: "Jane & John Smith" %>
+    </div>
+    <div>
+      <%= f.label :email, class: "tv-label" %>
+      <%= f.email_field :email, class: "tv-input" %>
+    </div>
+    <div>
+      <%= f.label :phone, class: "tv-label" %>
+      <%= f.telephone_field :phone, class: "tv-input" %>
+    </div>
+    <div>
+      <%= f.label :stage, class: "tv-label" %>
+      <%= f.select :stage, Client::STAGES, {}, class: "tv-input" %>
+    </div>
+    <div>
+      <%= f.label :budget, class: "tv-label" %>
+      <%= f.text_field :budget, class: "tv-input", placeholder: "$400k-$500k" %>
+    </div>
+    <div>
+      <%= f.label :pre_approved, "Pre-approved", class: "tv-label" %>
+      <%= f.select :pre_approved, Client::PRE_APPROVED, {}, class: "tv-input" %>
+    </div>
+    <div>
+      <%= f.label :pre_approval_amount, "Pre-approval amount", class: "tv-label" %>
+      <%= f.text_field :pre_approval_amount, class: "tv-input", placeholder: "$500,000" %>
+    </div>
+    <div class="sm:col-span-2">
+      <%= f.label :notes, class: "tv-label" %>
+      <%= f.text_area :notes, rows: 4, class: "tv-input", placeholder: "Preferences, must-haves, context..." %>
+    </div>
+  </div>
+
+  <div class="mt-5 flex gap-2">
+    <%= f.submit submit_label, class: "tv-btn-dark" %>
+    <%= link_to "Cancel", (client.persisted? ? client_path(client) : clients_path), class: "tv-btn-light" %>
+  </div>
+<% end %>

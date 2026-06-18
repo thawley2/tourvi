@@ -1,0 +1,36 @@
+<% content_for :title, "#{@client.name} · Tours" %>
+<div class="mx-auto max-w-2xl px-4 py-7">
+  <div class="mb-6 flex items-center gap-3">
+    <%= avatar @client.name, idx: @client.id %>
+    <div>
+      <div class="text-sm text-muted">Welcome back</div>
+      <h1 class="font-display text-2xl"><%= @client.name %></h1>
+    </div>
+  </div>
+
+  <h2 class="mb-3 text-[11px] font-bold uppercase tracking-wide text-muted">Your Tours</h2>
+
+  <% if @tours.any? %>
+    <div class="flex flex-col gap-3">
+      <% @tours.each do |tour| %>
+        <%= link_to portal_client_tour_path(@client.portal_token, tour),
+              class: "block rounded-xl border border-gold-soft bg-white p-4" do %>
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="font-semibold"><%= tour.name %></div>
+              <div class="mt-0.5 text-xs text-muted">
+                <%= pluralize(tour.properties.size, "stop") %><%= " · #{format_tour_date(tour.tour_date)}" if tour.tour_date %><%= " at #{tour.tour_time}" if tour.tour_time.present? %>
+              </div>
+            </div>
+            <%= status_badge(tour.past? ? "completed" : tour.status) %>
+          </div>
+          <% if tour.properties.size > 1 %>
+            <div class="mt-2 text-xs text-muted">~<%= total_drive_time(tour.properties.size) %> min total drive</div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="rounded-xl border border-gold-soft bg-white p-8 text-center text-muted">No tours yet.</div>
+  <% end %>
+</div>

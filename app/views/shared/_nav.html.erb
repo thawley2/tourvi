@@ -1,0 +1,38 @@
+<nav class="flex h-[51px] items-center justify-between bg-ink px-4 sm:px-6">
+  <%= link_to root_path, class: "flex items-center gap-2" do %>
+    <span class="flex h-[26px] w-[26px] items-center justify-center rounded-md bg-gold">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L2 5.5V13h3.5V9h3v4H12V5.5L7 1Z" fill="#1A1A18"/></svg>
+    </span>
+    <span class="font-display text-[17px] font-medium tracking-tight text-white">tourvi</span>
+  <% end %>
+
+  <div class="flex items-center gap-1">
+    <%= link_to "+ Client", new_client_path, class: nav_link_classes(current_page?(new_client_path)) %>
+    <%= link_to "+ New Tour", new_tour_path, class: nav_link_classes(current_page?(new_tour_path)) %>
+    <%= link_to "Tours", root_path, class: "#{nav_link_classes(current_page?(root_path))} hidden sm:inline-block" %>
+    <%= link_to "Calendar", calendar_path, class: "#{nav_link_classes(current_page?(calendar_path))} hidden sm:inline-block" %>
+
+    <% if pending_suggestions_count.positive? %>
+      <%= link_to suggestions_path, class: "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-semibold text-gold" do %>
+        <span class="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-gold text-[9px] font-extrabold text-ink"><%= pending_suggestions_count %></span>
+        <span class="hidden sm:inline">Suggestions</span>
+      <% end %>
+    <% end %>
+
+    <%= render "notifications/bell", agent: current_agent %>
+
+    <div class="relative ml-1" data-controller="dropdown">
+      <button data-action="dropdown#toggle" class="flex items-center">
+        <%= agent_avatar current_agent, size: :sm %>
+      </button>
+      <div data-dropdown-target="menu" class="absolute right-0 top-[calc(100%+8px)] z-50 hidden w-52 overflow-hidden rounded-xl border border-line bg-white shadow-xl">
+        <div class="border-b border-line px-4 py-3">
+          <div class="text-sm font-semibold"><%= current_agent.name %></div>
+          <div class="text-xs text-muted"><%= current_agent.brokerage %></div>
+        </div>
+        <%= link_to "Profile", profile_path, class: "block px-4 py-2.5 text-sm hover:bg-cream" %>
+        <%= button_to "Sign out", destroy_agent_session_path, method: :delete, class: "block w-full px-4 py-2.5 text-left text-sm text-[#DC2626] hover:bg-cream" %>
+      </div>
+    </div>
+  </div>
+</nav>

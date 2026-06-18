@@ -1,0 +1,41 @@
+<%# Pass `suggestions`. Uses @client, @tour. %>
+<% if suggestions.any? %>
+  <div class="mb-3 rounded-xl border border-[#F0E0A0] bg-[#FFFBF0] px-4 py-3">
+    <div class="mb-1.5 text-sm font-semibold text-[#856404]">Your Suggestions</div>
+    <% suggestions.each do |s| %>
+      <div class="flex items-center justify-between gap-2 border-b border-[#F5ECC0] py-1 text-sm last:border-0">
+        <span><%= s.address %><%= ", #{s.city}" if s.city.present? %></span>
+        <%= suggestion_status_badge s.status %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<details class="rounded-xl border-2 border-dashed border-gold-soft p-4">
+  <summary class="cursor-pointer text-center text-sm font-semibold text-gold-deep">+ Suggest a Property</summary>
+  <%= form_with url: portal_client_tour_suggestions_path(@client.portal_token, @tour), class: "mt-3" do |f| %>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="col-span-2">
+        <%= f.label :address, class: "tv-label" %>
+        <%= f.text_field "suggestion[address]", class: "tv-input", placeholder: "123 Main St" %>
+      </div>
+      <div class="col-span-2">
+        <%= f.label :city, "City, State ZIP", class: "tv-label" %>
+        <%= f.text_field "suggestion[city]", class: "tv-input" %>
+      </div>
+      <div>
+        <%= f.label :price, class: "tv-label" %>
+        <%= f.text_field "suggestion[price]", class: "tv-input" %>
+      </div>
+      <div>
+        <%= f.label :beds, class: "tv-label" %>
+        <%= f.number_field "suggestion[beds]", class: "tv-input" %>
+      </div>
+      <div>
+        <%= f.label :baths, class: "tv-label" %>
+        <%= f.number_field "suggestion[baths]", class: "tv-input" %>
+      </div>
+    </div>
+    <%= f.submit "Send to Agent", class: "tv-btn-gold mt-3 !py-2 !text-xs" %>
+  <% end %>
+</details>

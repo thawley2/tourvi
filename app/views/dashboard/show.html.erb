@@ -1,0 +1,57 @@
+<% content_for :title, "Tours" %>
+<div class="tv-page">
+  <%# Search %>
+  <%= form_with url: search_path, method: :get, class: "mb-6" do %>
+    <%= text_field_tag :q, params[:q], placeholder: "Search tours, clients, addresses...",
+          class: "tv-input", autocomplete: "off" %>
+  <% end %>
+
+  <%# Week widget %>
+  <div class="tv-card mb-8 p-4">
+    <div class="mb-3 flex items-center justify-between">
+      <h2 class="font-display text-lg">
+        <%= @week_start.strftime("%b %-d") %> – <%= @week_days.last.strftime("%b %-d") %>
+      </h2>
+      <div class="flex gap-1">
+        <%= link_to "‹", root_path(week: @week_offset - 1), class: "tv-btn-light !px-3 !py-1" %>
+        <%= link_to "Today", root_path, class: "tv-btn-light !px-3 !py-1 !text-xs" %>
+        <%= link_to "›", root_path(week: @week_offset + 1), class: "tv-btn-light !px-3 !py-1" %>
+      </div>
+    </div>
+    <div class="grid grid-cols-7 gap-1">
+      <% @week_days.each do |day| %>
+        <% day_tours = @tours_by_date[day] || [] %>
+        <div class="min-h-[84px] rounded-lg border border-line p-1.5 <%= "bg-cream-card" if day == Date.current %>">
+          <div class="mb-1 text-center">
+            <div class="text-[10px] uppercase text-muted"><%= day.strftime("%a") %></div>
+            <div class="text-xs font-semibold <%= "text-gold-deep" if day == Date.current %>"><%= day.day %></div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <% day_tours.each do |tour| %>
+              <%= link_to tour_path(tour), class: "block truncate rounded bg-cream px-1 py-0.5 text-[10px] font-medium hover:bg-gold-soft" do %>
+                <%= tour.tour_time.presence %> <%= tour.name %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# All tours %>
+  <div class="mb-3 flex items-center justify-between">
+    <h2 class="font-display text-xl">All Tours</h2>
+    <%= link_to "+ New Tour", new_tour_path, class: "tv-btn-dark !py-2 !text-xs" %>
+  </div>
+  <% if @tours.any? %>
+    <div class="tv-card divide-y divide-cream overflow-hidden">
+      <% @tours.each do |tour| %>
+        <%= render "tours/row", tour: tour %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="tv-card p-10 text-center text-muted">
+      No tours yet. <%= link_to "Create your first tour", new_tour_path, class: "text-gold-deep underline" %>.
+    </div>
+  <% end %>
+</div>

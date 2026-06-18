@@ -68,3 +68,6 @@ group :test do
 end
 
 gem "devise", "~> 5.0"
+
+# Position management for ordered lists (tour stops) [https://github.com/brendon/acts_as_list]
+gem "acts_as_list"

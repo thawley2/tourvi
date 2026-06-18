@@ -1,0 +1,51 @@
+<% content_for :title, "Calendar" %>
+<div class="tv-page" data-controller="calendar" data-calendar-url-value="<%= tour_path("ID") %>">
+  <div class="mb-4 flex items-center justify-between">
+    <h1 class="font-display text-2xl"><%= @first.strftime("%B %Y") %></h1>
+    <div class="flex gap-1">
+      <%= link_to "‹", calendar_path(month: @prev_month.month, year: @prev_month.year), class: "tv-btn-light !px-3 !py-1" %>
+      <%= link_to "Today", calendar_path, class: "tv-btn-light !px-3 !py-1 !text-xs" %>
+      <%= link_to "›", calendar_path(month: @next_month.month, year: @next_month.year), class: "tv-btn-light !px-3 !py-1" %>
+    </div>
+  </div>
+
+  <div class="tv-card overflow-hidden">
+    <div class="grid grid-cols-7 border-b border-line bg-cream-card">
+      <% %w[Sun Mon Tue Wed Thu Fri Sat].each do |d| %>
+        <div class="px-2 py-2 text-center text-[11px] font-semibold uppercase text-muted"><%= d %></div>
+      <% end %>
+    </div>
+    <div class="grid grid-cols-7">
+      <% @cells.each_with_index do |day, i| %>
+        <% if day.nil? %>
+          <div class="min-h-[92px] border-b border-r border-line bg-cream-card last:border-r-0"></div>
+        <% else %>
+          <% is_today = day == Date.current %>
+          <div class="group min-h-[92px] border-b border-r border-line p-1.5 <%= "bg-cream-card" if is_today %>"
+               data-calendar-target="cell" data-date="<%= day.iso8601 %>"
+               data-action="dragover->calendar#allow drop->calendar#drop">
+            <div class="flex items-center justify-between">
+              <span class="flex h-5 w-5 items-center justify-center rounded-full text-[11px] <%= is_today ? "bg-ink font-bold text-gold" : "text-[#444444]" %>"><%= day.day %></span>
+              <%= link_to "+", new_tour_path(date: day.iso8601),
+                    class: "hidden h-4 w-4 items-center justify-center rounded-full border border-line text-[10px] text-muted group-hover:flex" %>
+            </div>
+            <div class="mt-1 flex flex-col gap-1">
+              <% (@tours_by_date[day] || []).each do |tour| %>
+                <% sc = tour.past? ? "completed" : tour.status %>
+                <div draggable="true" data-tour-id="<%= tour.id %>"
+                     data-action="dragstart->calendar#start"
+                     class="cursor-grab rounded border-l-[3px] <%= status_dot_border(sc) %> bg-cream px-1 py-0.5">
+                  <%= link_to tour_path(tour), class: "block" do %>
+                    <% if tour.tour_time.present? %><div class="text-[9px] font-bold text-muted"><%= tour.tour_time %></div><% end %>
+                    <div class="truncate text-[10px] font-semibold"><%= tour.name %></div>
+                    <div class="truncate text-[9px] text-muted"><%= tour.client.name %></div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

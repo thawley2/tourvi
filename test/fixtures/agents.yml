@@ -1,0 +1,16 @@
+janey:
+  email: janey@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(Agent, "tourvi123") %>
+  name: Janey Hawley
+  phone: "720-555-0101"
+  title: Realtor
+  brokerage: Fat Bird Realty
+  license_number: CO-RE-284910
+  profile_color: "#C9A96E"
+
+marcus:
+  email: marcus@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(Agent, "tourvi123") %>
+  name: Marcus Reid
+  brokerage: Reid Realty Group
+  profile_color: "#7B9E87"

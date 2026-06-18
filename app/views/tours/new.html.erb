@@ -1,0 +1,10 @@
+<% content_for :title, "New Tour" %>
+<div class="mx-auto max-w-2xl px-4 py-8">
+  <h1 class="mb-5 font-display text-2xl">New Tour</h1>
+  <% if current_agent.clients.none? %>
+    <div class="tv-card mb-4 p-4 text-sm text-muted">
+      You need a client first. <%= link_to "Add a client", new_client_path, class: "text-gold-deep underline" %>.
+    </div>
+  <% end %>
+  <%= render "form", tour: @tour, submit_label: "Create Tour" %>
+</div>

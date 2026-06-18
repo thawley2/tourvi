@@ -1,0 +1,31 @@
+<% content_for :title, "Search" %>
+<div class="tv-page">
+  <%= form_with url: search_path, method: :get, class: "mb-6" do %>
+    <%= text_field_tag :q, @query, placeholder: "Search tours, clients, addresses...",
+          class: "tv-input", autofocus: true, autocomplete: "off" %>
+  <% end %>
+
+  <% if @query.blank? %>
+    <p class="text-center text-muted">Type something to search.</p>
+  <% else %>
+    <p class="mb-4 text-sm text-muted">Results for “<%= @query %>”</p>
+
+    <% if @clients.any? %>
+      <h2 class="mb-2 font-display text-lg">Clients</h2>
+      <div class="mb-6 grid gap-3 sm:grid-cols-2"><%= render @clients %></div>
+    <% end %>
+
+    <% if @tours.any? %>
+      <h2 class="mb-2 font-display text-lg">Tours</h2>
+      <div class="tv-card divide-y divide-cream overflow-hidden">
+        <% @tours.each do |tour| %>
+          <%= render "tours/row", tour: tour %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @tours.none? && @clients.none? %>
+      <div class="tv-card p-10 text-center text-muted">No matches found.</div>
+    <% end %>
+  <% end %>
+</div>
